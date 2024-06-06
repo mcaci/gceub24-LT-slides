@@ -68,9 +68,65 @@ I know it's a lot of content for the lightning talk and I will be very careful a
 transition: fade-out
 ---
 
-# Gem #1
+# Gem #1.1
 
 How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
+
+Imagine I'm writing a chat application and I want to transfer a message to a person, a common way to do it is to read it and transfer it again
+
+```go
+b, err := io.ReadAll(in)
+if err != nil {
+  return err
+}
+w.Write(b)
+```
+
+---
+transition: fade-out
+---
+
+# Gem #1.2
+
+A cleaner way to do it is to use io.Copy
+
+```go
+_, err := io.Copy(dst, src)
+if err != nil {
+  return err
+}
+```
+
+---
+transition: fade-out
+---
+
+# Gem #1.3
+
+And what if I want to broadcast a message to multiple persons?
+
+Just list all writers you need to write to with io.MultiWriter
+
+so instead of 
+
+```go
+b, err := io.ReadAll(in)
+if err != nil {
+  return err
+}
+w1.Write(b)
+w2.Write(b)
+```
+
+you can go with
+
+```go
+dsts := io.MultiWriter(dst1, dst2, dst3)
+_, err := io.Copy(dsts, src)
+if err != nil {
+  return err
+}
+```
 
 ---
 transition: fade-out
@@ -80,6 +136,22 @@ transition: fade-out
 
 How to manage error creation from the fmt package to the errors package, from the verbs "%s", "%v" and "%w" up to the errors.Join;
 
+Errors: we all love them
+
+We started creating them with errors.New and fmt.Errorf.
+
+But most commonly with fmt.Errorf you can still see the usage of %s and %v to relate to the error. Not good.
+
+But then again %w was only introduced in 2019 (with [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping))... so 4 years ago.
+
+For those who don't yet know %w indicates the wrapping of an error, but since early 2023 (with [v1.20](https://tip.golang.org/doc/go1.20#errors)) the possibility to wrap multiple errors was introduced.
+
+Which is great! But how do we do this? `fmt.Errorf("%w: %w: %w", err1, err2, err3)`, `fmt.Errorf("err1 %w; err2 %w; err3 %w", err1, err2, err3)`...
+
+Let's have this solved by `errors.Join(err1, err2, err3)`
+
+It is important to be able the error, but also from the application it is important to have it clear that one error can be one or several others. (application does not care of the formatting)
+
 ---
 transition: fade-out
 ---
@@ -87,6 +159,16 @@ transition: fade-out
 # Gem #3
 
 How to manage efficiently slices and maps operations witht the use of the generic functions in the slices and maps packages;
+
+I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
+
+Since [v1.21](https://tip.golang.org/doc/go1.21#library) we can use the maps, slices packages to do operations in maps and slices thanks to generics.
+
+Before that you had to manipulate the code by hand
+
+```go
+make exaple in go
+```
 
 ---
 transition: fade-out
