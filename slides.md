@@ -158,9 +158,13 @@ transition: fade-out
 
 # Gem #3
 
-How to manage efficiently slices and maps operations witht the use of the generic functions in the slices and maps packages;
+How to manage efficiently slices and maps operations with the use of the generic functions in the slices and maps packages;
 
 I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
+
+```go
+func update(h html.Header, toAdd html.Header, to delete []string {}
+```
 
 Since [v1.21](https://tip.golang.org/doc/go1.21#library) we can use the maps, slices packages to do operations in maps and slices thanks to generics.
 
