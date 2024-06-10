@@ -74,7 +74,9 @@ How to manage data transfer with the io package: from io.Copy vs io.ReadAll up t
 
 Imagine I'm writing a chat application and I want to transfer a message to a person, a common way to do it is to read it and transfer it again
 
-```go
+````md magic-move {lines: true}
+```go {all|2|all}
+// Read all input then write it
 b, err := io.ReadAll(in)
 if err != nil {
   return err
@@ -82,26 +84,21 @@ if err != nil {
 w.Write(b)
 ```
 
----
-transition: fade-out
----
 
-# Gem #1.2
-
-A cleaner way to do it is to use io.Copy
-
-```go
+```go {all|2|all}
+// copy the input from the src to the dst
 _, err := io.Copy(dst, src)
 if err != nil {
   return err
 }
 ```
+````
 
 ---
 transition: fade-out
 ---
 
-# Gem #1.3
+# Gem #1.2
 
 And what if I want to broadcast a message to multiple persons?
 
