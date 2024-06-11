@@ -135,51 +135,96 @@ if err != nil {
 transition: fade-out
 ---
 
----
-transition: fade-out
----
-
-# Gem #2
+# Gem 2
 
 How to manage error creation from the fmt package to the errors package, from the verbs "%s", "%v" and "%w" up to the errors.Join;
 
-Errors: we all love them
+Errors: we all love them, we started creating them with errors.New and fmt.Errorf.
 
-We started creating them with errors.New and fmt.Errorf.
+<v-click>
+````md magic-move {lines: true}
+```go
+// A new error
+err := errors.New("error in transferring the message")
+```
 
+```go
+// A new error with fmt.Errorf
+err := fmt.Errorf("error in transferring the message %q", msg)
+```
+
+```go
+// A new error with fmt.Errorf referencing another error (?)
+err := fmt.Errorf("error in transferring the message %q", oErr)
+```
+
+```go
+// A new error with fmt.Errorf wrapping another error 
+err := fmt.Errorf("error in transferring the message %w", oErr)
+```
+
+```go
+// A new error with fmt.Errorf wrapping multiple errors
+err := fmt.Errorf("error in transferring the message %w, %w, %w", oErr1, oErr2, oErr3)
+```
+
+```go
+// A new error with errors.Join wrapping multiple errors
+err := errors.Join(oErr1, oErr2, oErr3)
+```
+
+````
+</v-click>
+
+<v-clicks>
 But most commonly with fmt.Errorf you can still see the usage of %s and %v to relate to the error. Not good.
 
-But then again %w was only introduced in 2019 (with [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping))... so 4 years ago.
-
-For those who don't yet know %w indicates the wrapping of an error, but since early 2023 (with [v1.20](https://tip.golang.org/doc/go1.20#errors)) the possibility to wrap multiple errors was introduced.
+But then again %w was introduced in 2019 (with [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping))... so 4 years ago, it indicates the wrapping of an error, but since early 2023 (with [v1.20](https://tip.golang.org/doc/go1.20#errors)) the possibility to wrap multiple errors was introduced.
 
 Which is great! But how do we do this? `fmt.Errorf("%w: %w: %w", err1, err2, err3)`, `fmt.Errorf("err1 %w; err2 %w; err3 %w", err1, err2, err3)`...
 
 Let's have this solved by `errors.Join(err1, err2, err3)`
 
 It is important to be able the error, but also from the application it is important to have it clear that one error can be one or several others. (application does not care of the formatting)
+</v-clicks>
 
 ---
 transition: fade-out
 ---
 
-# Gem #3
+# Gem 3
 
 How to manage efficiently slices and maps operations with the use of the generic functions in the slices and maps packages;
 
 I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
 
+````md magic-move {lines: true}
 ```go
-func update(h html.Header, toAdd html.Header, to delete []string {}
+// http.Header is an alias for map[string][]string
+func update(h http.Header, toAdd http.Header, toDelete []string) {
+  for key, values := range toAdd {
+    for _, value := range values {
+      h.Add(key, value)
+    }
+  }
+  for _, key := range toDelete {
+    delete(h[key])
+  }
+}
 ```
+
+```go
+// http.Header is an alias for map[string][]string
+func update(h http.Header, toAdd http.Header, toDelete []string) {
+  // Copy all key/value pairs from a source map (toAdd) to the destination one (h)
+  maps.Copy(h, toAdd)
+  // Deletes all k,v pairs where the function yields true
+  maps.DeleteFunc(h, func(k, v string)) bool { return slices.Contains(toDelete, k)}
+}
+```
+````
 
 Since [v1.21](https://tip.golang.org/doc/go1.21#library) we can use the maps, slices packages to do operations in maps and slices thanks to generics.
-
-Before that you had to manipulate the code by hand
-
-```go
-make exaple in go
-```
 
 ---
 transition: fade-out
@@ -729,7 +774,7 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="663,206,261,_,-15">
+<v-drag pos="658,211,261,_,-15">
   <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>
