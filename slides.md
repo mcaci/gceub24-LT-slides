@@ -68,14 +68,18 @@ I know it's a lot of content for the lightning talk and I will be very careful a
 transition: fade-out
 ---
 
-# Gem #1.1
+# Gem 1
 
 How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
 
-Imagine I'm writing a chat application and I want to transfer a message to a person, a common way to do it is to read it and transfer it again
+<v-click>
+Let's see the transfer a message to one destination chat application
+</v-click>
+
+<v-click>
 
 ````md magic-move {lines: true}
-```go {all|2|all}
+```go {all|2}
 // Read all input then write it
 b, err := io.ReadAll(in)
 if err != nil {
@@ -85,7 +89,7 @@ w.Write(b)
 ```
 
 
-```go {all|2|all}
+```go {2|all}
 // copy the input from the src to the dst
 _, err := io.Copy(dst, src)
 if err != nil {
@@ -93,20 +97,17 @@ if err != nil {
 }
 ```
 ````
+</v-click>
 
----
-transition: fade-out
----
 
-# Gem #1.2
+<v-click>
+How about transferring the message to multiple destinations?
+</v-click>
 
-And what if I want to broadcast a message to multiple persons?
-
-Just list all writers you need to write to with io.MultiWriter
-
-so instead of 
-
-```go
+<v-click>
+````md magic-move {lines: true}
+```go {all|2|all}
+// Read all input then write it
 b, err := io.ReadAll(in)
 if err != nil {
   return err
@@ -115,15 +116,24 @@ w1.Write(b)
 w2.Write(b)
 ```
 
-you can go with
 
-```go
+```go {all|2|all}
+// list all writers you need to write to with io.MultiWriter
 dsts := io.MultiWriter(dst1, dst2, dst3)
+// then copy the input from the src to the dst
 _, err := io.Copy(dsts, src)
 if err != nil {
   return err
 }
 ```
+````
+</v-click>
+
+<!-- Imagine I'm writing a chat application and I want to transfer a message to a person, a common way to do it is to read it and transfer it again -->
+
+---
+transition: fade-out
+---
 
 ---
 transition: fade-out
