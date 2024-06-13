@@ -1,61 +1,68 @@
 ---
-# try also 'default' to start simple
 theme: seriph
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
-# some information about your slides, markdown enabled
-title: Welcome to Slidev
+background: /images/Gems1.jpeg
+title: Step up your Go game with these few simple gems
 info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
-# apply any unocss classes to the current slide
+  ## Step up your Go game with these few simple gems
+  Slides for GopherConEUb 2024
 class: text-center
-# https://sli.dev/custom/highlighters.html
+layout: cover
 highlighter: shiki
-# https://sli.dev/guide/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations#slide-transitions
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
 mdc: true
 ---
 
-# Step up your Go game with these unsuspecting gems
+# Step up your Go game with these few simple gems
 
-Michele Caci
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
+<div class="absolute bottom-10 text-left">
+    <div>Michele Caci</div>
+    <div>Senior Software Engineer at Amadeus</div>
+    <div class="flex m-0 gap-1">
+      <a href="https://github.com/mcaci" target="_blank" alt="Michele's GitHub" title="Michele's GitHub"
+        class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+        <carbon-logo-github />
+      </a>
+      <a href="https://x.com/goMicheleCaci" target="_blank" alt="Michele's X" title="Michele's X"
+        class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+        <carbon-logo-x />
+      </a>
+      <a href="https://www.linkedin.com/in/michele-caci-47770132/" target="_blank" alt="Michele's Linkedin" title="Michele's Linkedin"
+        class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+        <carbon-logo-linkedin />
+      </a>
+    </div>
 </div>
 
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
+<!-- 
+Bio: I'm Michele, Italian from Sicily, I am a passionate Gopher since 2018 and before then I used to work in Java, Scala and C++. I always like make side projects and develop new things when time let's me :D. Besides programming, I enjoy swimming, cooking and learning languages; currently, I'm learning Japanese: Yoroshiku onegai shimasu! 
 -->
 
 ---
+layout: image-right
+image: /images/Gophers1.jpeg
+backgroundSize: 70%
 transition: fade-out
 ---
 
-# My message
+# Leveling up our Go game
 
-We all have good Go game and we know how to write simple and effective Go, but how about kicking it up a notch? Let's see how the standard library can level up our Go game with the treasures in its packages and make our Go game even stronger.
+Go is a simple language
 
+<v-clicks>
+
+Our Go game is strong and we know how to write simple and effective Go.
+
+But over the time Go has evolved.
+
+And the **standard library** has tools from old and new that can level up our Go game.
+
+Let's make our Go game even stronger with these treasures from the standard library.
+</v-clicks>
+
+<!-- 
 Additional information -> With this proposal I want to showcase at most three usecases from the standard that can help our daily life while writing Go code:
 
 1) How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
@@ -63,6 +70,7 @@ Additional information -> With this proposal I want to showcase at most three us
 3) How to manage efficiently slices and maps operations witht the use of the generic functions in the slices and maps packages;
 
 I know it's a lot of content for the lightning talk and I will be very careful at the end in selecting which of these items I will present but I'm confident that it will give to other gophers some inspiration in going out of the box yet still in the standard library to discover all the powerful tools it provides. I plan to use just a slideshow since the time is short.
+-->
 
 ---
 transition: fade-out
@@ -230,9 +238,39 @@ Since [v1.21](https://tip.golang.org/doc/go1.21#library) we can use the maps, sl
 transition: fade-out
 ---
 
+# My message
+
+The standard library has some useful gems that can improve our Go game.
+
+Any time you can check the [standard library](https://pkg.go.dev/std) to find the packages.
+
+And by improved I mean leveraging the simplicity of Go to make our applications even more simpler.
+
+---
+layout: lblue-end
+
+transition: fade-out
+---
+
 # Thank you!
 
-Bio: I'm Michele, Italian from Sicily, I am a passionate Gopher since 2018 and before then I used to work in Java, Scala and C++. I always like make side projects and develop new things when time let's me :D. Besides programming, I enjoy swimming, cooking and learning languages; currently, I'm learning Japanese: Yoroshiku onegai shimasu!
+<div class="absolute bottom-10">
+  <div>Michele Caci</div>
+  <div class="flex m-0 gap-1">
+    <a href="https://github.com/mcaci" target="_blank" alt="Michele's GitHub" title="Michele's GitHub"
+      class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+      <carbon-logo-github />
+    </a>
+    <a href="https://x.com/goMicheleCaci" target="_blank" alt="Michele's X" title="Michele's X"
+      class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+      <carbon-logo-x />
+    </a>
+    <a href="https://www.linkedin.com/in/michele-caci-47770132/" target="_blank" alt="Michele's Linkedin" title="Michele's Linkedin"
+      class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+      <carbon-logo-linkedin />
+    </a>
+  </div>
+</div>
 
 ---
 transition: fade-out
@@ -254,6 +292,8 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 <br>
 
 Read more about [Why Slidev?](https://sli.dev/guide/why)
+
+This is a [red text]{style="color:red"} :inline-component{prop="value"}
 
 <!--
 You can have `style` tag in markdown to override the style for the current page.
