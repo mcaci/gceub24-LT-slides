@@ -1,11 +1,11 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# Step up your Go game with these few simple gems
+
+These are the slides for the lightning talk to give at gceu2024b.
 
 To start the slide show:
 
 - `npm install`
 - `npm run dev`
-- visit http://localhost:3030
+- open http://localhost:3030 if not done automatically
 
-Edit the [slides.md](./slides.md) to see the changes.
-
-Learn more about Slidev on [documentations](https://sli.dev/).
+The slides have built with [Slidev](https://github.com/slidevjs/slidev).
