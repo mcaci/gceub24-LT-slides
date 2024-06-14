@@ -42,38 +42,59 @@ Bio: I'm Michele, Italian from Sicily, I am a passionate Gopher since 2018 and b
 
 ---
 transition: fade-out
+layout: fact
+class: 'text-white bg-#00ADD8 font-size-10'
+---
+
+Go is a simple language
+
+---
+transition: fade-out
 layout: image-right
 image: /images/Gophers1.jpeg
 backgroundSize: 80%
 ---
 
-# Leveling up our Go game
+# About Go's simplicity
 
-Go is a simple language
+One of Go's strengths
 
 <v-clicks>
 
-We know how to write simple and effective Go.
-
-And leveraging the simplicity of Go is the key to our Go skills.
-
+- Go is simple to learn
+- Go is simple to write
+- Go is simple to read
 </v-clicks>
+
+<v-clicks>
+
+Leveraging the simplicity of Go is the key to improving our Go skills.
+
+There have already been many discussions about this topic:
+</v-clicks>
+
+<v-clicks>
+
+- Rob Pike's [talk](https://www.youtube.com/watch?v=rFejpH_tAHM&t=1s): Simplicity is Complicated;
+- Go Time's episode [#296](https://changelog.com/gotime/296): Principles of simplicity;
+</v-clicks>
+
+<v-click>But today I'm going to take Go's simplicity from a new angle.</v-click>
 
 ---
 transition: fade-out
-layout: fact
+layout: lblue-fact
 ---
 
-<v-clicks>
+The evolution of Go code over time
 
-But over the time Go has evolved.
+<!-- 
+Both related to our codebase, especially from my personal experience, and to the standard library.
 
 The **standard library** has tools from old and new that can level up our Go game.
 
 Let's make our Go game even stronger with these treasures from the standard library.
-</v-clicks>
 
-<!-- 
 Additional information -> With this proposal I want to showcase at most three usecases from the standard that can help our daily life while writing Go code:
 
 1) How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
@@ -87,9 +108,9 @@ I know it's a lot of content for the lightning talk and I will be very careful a
 transition: fade-out
 ---
 
-# Gem 1
+# Example #1
 
-How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
+Tranferring data
 
 <v-click>
 Let's see the transfer a message to one destination chat application
@@ -151,13 +172,20 @@ if err != nil {
 
 ---
 transition: fade-out
+layout: lblue-fact
 ---
 
-# Gem 2
+Gem #1: use io.Copy when transferring data
 
-How to manage error creation from the fmt package to the errors package, from the verbs "%s", "%v" and "%w" up to the errors.Join;
+---
+transition: fade-out
+---
 
-Errors: we all love them, we started creating them with errors.New and fmt.Errorf.
+# Example #2
+
+Error creation and wrapping
+
+<v-click>Let's see how errors can be created in Go code</v-click>
 
 <v-click>
 ````md magic-move {lines: true}
@@ -168,57 +196,88 @@ err := errors.New("error in transferring the message")
 
 ```go
 // A new error with fmt.Errorf
-err := fmt.Errorf("error in transferring the message %q", msg)
+err := fmt.Errorf("error in transferring the message: %s", msg)
 ```
 
 ```go
-// A new error with fmt.Errorf referencing another error (?)
-err := fmt.Errorf("error in transferring the message %q", oErr)
+// A new error with fmt.Errorf referencing another error by error message (%s, %v or %q)
+err := fmt.Errorf("error in transferring the message: %s", oErr.Error())
 ```
+````
+</v-click>
 
+<v-clicks>
+
+An application gets more complex if you need to bind the way errors are handled with its text message.
+
+- Unit tests broken because the error message was not the one expected
+
+_A human cares about the error message, an application cares more about what type of error it is_
+
+To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019).
+
+And more recently, multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023).
+</v-clicks>
+
+<v-click>
+````md magic-move {lines: true}
 ```go
 // A new error with fmt.Errorf wrapping another error 
-err := fmt.Errorf("error in transferring the message %w", oErr)
+err := fmt.Errorf("error in transferring the message: %w", oErr)
 ```
 
 ```go
 // A new error with fmt.Errorf wrapping multiple errors
-err := fmt.Errorf("error in transferring the message %w, %w, %w", oErr1, oErr2, oErr3)
+err := fmt.Errorf("error in transferring the message: %w, %w, %w", oErr1, oErr2, oErr3)
 ```
 
 ```go
 // A new error with errors.Join wrapping multiple errors
 err := errors.Join(oErr1, oErr2, oErr3)
 ```
-
 ````
 </v-click>
 
-<v-clicks>
-But most commonly with fmt.Errorf you can still see the usage of %s and %v to relate to the error. Not good.
+<v-click>
 
-But then again %w was introduced in 2019 (with [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping))... so 4 years ago, it indicates the wrapping of an error, but since early 2023 (with [v1.20](https://tip.golang.org/doc/go1.20#errors)) the possibility to wrap multiple errors was introduced.
+With wrapping you can use _errors.As_ and _errors.Is_ to handle errors in a simpler and safer way.
+</v-click>
 
-Which is great! But how do we do this? `fmt.Errorf("%w: %w: %w", err1, err2, err3)`, `fmt.Errorf("err1 %w; err2 %w; err3 %w", err1, err2, err3)`...
+<!-- Errors: we all love them, we started creating them with errors.New and fmt.Errorf. -->
 
-Let's have this solved by `errors.Join(err1, err2, err3)`
+---
+transition: fade-out
+layout: lblue-fact
+---
 
-It is important to be able the error, but also from the application it is important to have it clear that one error can be one or several others. (application does not care of the formatting)
-</v-clicks>
+Gem #2: wrap errors with %w or errors.Join
+
+<v-click>
+<div class="font-size-5">*changing from %[s|q|v] to %w is transparent</div>
+</v-click>
+<v-click>
+<div class="font-size-5">most of the times</div>
+</v-click>
+
+
+<!-- and if you see fmt.Errorf still using %s to refer to error messages translate them to wrapped errors with no harm -->
 
 ---
 transition: fade-out
 ---
 
-# Gem 3
+# Example #3
 
-How to manage efficiently slices and maps operations with the use of the generic functions in the slices and maps packages;
+Slice and maps operations and generics
 
-I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
+<v-clicks>
+
+Let's see the example of a proxy server that has to manipulate an input header from an HTTP request by adding some custom headers and removing others.
 
 ````md magic-move {lines: true}
 ```go
 // http.Header is an alias for map[string][]string
+// update updates the header h with some headers to add and some keys to delete
 func update(h http.Header, toAdd http.Header, toDelete []string) {
   for key, values := range toAdd {
     for _, value := range values {
@@ -233,6 +292,7 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 
 ```go
 // http.Header is an alias for map[string][]string
+// update updates the header h with some headers to add and some keys to delete
 func update(h http.Header, toAdd http.Header, toDelete []string) {
   // Copy all key/value pairs from a source map (toAdd) to the destination one (h)
   maps.Copy(h, toAdd)
@@ -242,17 +302,24 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 ```
 ````
 
-Since [v1.21](https://tip.golang.org/doc/go1.21#library) we can use the maps, slices packages to do operations in maps and slices thanks to generics.
+Since Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) and the introduction of generics, we can use the _maps_ and _slices_ packages to do operations on any kind of map or slice.
+
+This results in less loops to read and more straightforward code.
+</v-clicks>
+
+
+<!-- 
+I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
+-->
 
 ---
 transition: fade-out
-layout: fact
+layout: lblue-fact
 ---
 
-## Leveraging the simplicity of Go makes our applications simpler
-
+Gem #3: use maps and slices packages
 <v-click>
-And this is how we can improve our Go game.
+<div class="font-size-5">and reduce the number of loops you'll have to do on them</div>
 </v-click>
 
 ---
@@ -264,23 +331,41 @@ backgroundSize: 80%
 
 # Conclusions
 
-Strive for the same simplicity that the Go strives for 
+Strive for the same simplicity that Go strives for 
 
-The standard library has evolved as our code does.
+<v-clicks>
 
-Take the time to check the [standard library](https://pkg.go.dev/std) to find the content of its packages.
+The standard library evolves.
 
-Take from it what you need to make your code even simpler.
+Our code should follow as well.
+
+From time to time have a look at:
+
+- the [standard library](https://pkg.go.dev/std) packages
+- the [release notes](https://tip.golang.org/doc/devel/release)
+
+These are the places where we'll find the most valuable gems to make our Go code simpler
+</v-clicks>
+
+---
+layout: fact
+transition: fade-out
+class: "font-size-7.8"
+---
+
+And making our code simpler is how we step up our Go game!
 
 ---
 layout: lblue-end
 transition: fade-out
 ---
 
-# Thank you!
+<div class="text-white font-size-10">
+Thank you very much!
+</div>
 
 <div class="absolute bottom-10">
-  <div>Michele Caci</div>
+  <div  class="text-white">Michele Caci</div>
   <div class="flex m-0 gap-1">
     <a href="https://github.com/mcaci" target="_blank" alt="Michele's GitHub" title="Michele's GitHub"
       class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
