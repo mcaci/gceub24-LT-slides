@@ -55,45 +55,35 @@ image: /images/Gophers1.jpeg
 backgroundSize: 80%
 ---
 
-# About Go's simplicity
+# Why is it important?
 
-One of Go's strengths
-
-<v-clicks>
-
-- Go is simple to learn
-- Go is simple to write
-- Go is simple to read
-</v-clicks>
+<div/>
 
 <v-clicks>
 
-Leveraging the simplicity of Go is the key to improving our Go skills.
+As Go is simple to learn
 
-There have already been many discussions about this topic:
+- you can adopt it for your everyday work __faster__
+
+As Go is simple to write
+
+- you can write __clearer__ code
+
+As Go is simple to read
+
+- __anyone__ will be able to understand it __more easily__
+
+__Leveraging the simplicity of Go is the key to improving our Go skills__
+
+Let's see it with some examples
 </v-clicks>
-
-<v-clicks>
-
-- Rob Pike's [talk](https://www.youtube.com/watch?v=rFejpH_tAHM&t=1s): Simplicity is Complicated;
-- Go Time's episode [#296](https://changelog.com/gotime/296): Principles of simplicity;
-</v-clicks>
-
-<v-click>But today I'm going to take Go's simplicity from a new angle.</v-click>
-
----
-transition: fade-out
-layout: lblue-fact
----
-
-The evolution of Go code over time
 
 <!-- 
-Both related to our codebase, especially from my personal experience, and to the standard library.
+Both related to our codebase, especially from my personal experience, and to the standard library
 
-The **standard library** has tools from old and new that can level up our Go game.
+The **standard library** has tools from old and new that can level up our Go game
 
-Let's make our Go game even stronger with these treasures from the standard library.
+Let's make our Go game even stronger with these treasures from the standard library
 
 Additional information -> With this proposal I want to showcase at most three usecases from the standard that can help our daily life while writing Go code:
 
@@ -101,7 +91,7 @@ Additional information -> With this proposal I want to showcase at most three us
 2) How to manage error creation from the fmt package to the errors package, from the verbs "%s", "%v" and "%w" up to the errors.Join;
 3) How to manage efficiently slices and maps operations witht the use of the generic functions in the slices and maps packages;
 
-I know it's a lot of content for the lightning talk and I will be very careful at the end in selecting which of these items I will present but I'm confident that it will give to other gophers some inspiration in going out of the box yet still in the standard library to discover all the powerful tools it provides. I plan to use just a slideshow since the time is short.
+I know it's a lot of content for the lightning talk and I will be very careful at the end in selecting which of these items I will present but I'm confident that it will give to other gophers some inspiration in going out of the box yet still in the standard library to discover all the powerful tools it provides. I plan to use just a slideshow since the time is short
 -->
 
 ---
@@ -110,65 +100,71 @@ transition: fade-out
 
 # Example #1
 
-Tranferring data
+transferring data
 
 <v-click>
-Let's see the transfer a message to one destination chat application
+
+For example storing the content of a CSV file or transferring the body of an HTTP request
 </v-click>
 
 <v-click>
 
 ````md magic-move {lines: true}
-```go {all|2}
-// Read all input then write it
-b, err := io.ReadAll(in)
-if err != nil {
+```go {all|2|2,6}
+func forwardContentToTarget(target io.Writer, source io.Reader) error {
+  bytes, err := io.ReadAll(source) // read the source
+  if err != nil {
+    return err
+  }
+  _, err = fmt.Fprint(target, bytes) // and transfer it
   return err
 }
-w.Write(b)
 ```
-
 
 ```go {2|all}
-// copy the input from the src to the dst
-_, err := io.Copy(dst, src)
-if err != nil {
-  return err
+func forwardContentToTarget(target io.Writer, source io.Reader) error {
+  _, err := io.Copy(target, source) // read the source and transfer it
+  if err != nil {
+    return err
+  }
 }
 ```
 ````
 </v-click>
 
 <v-click>
-How about transferring the message to multiple destinations?
+How about transferring the same content to multiple targets?
 </v-click>
 
 <v-click>
 ````md magic-move {lines: true}
-```go {all|2|all}
-// Read all input then write it
-b, err := io.ReadAll(in)
-if err != nil {
-  return err
+```go {all|2|2,6-9}
+func forwardContentToTargets(targets ...io.Writer, source io.Reader) error {
+  bytes, err := io.ReadAll(source) // read the source
+  if err != nil {
+    return err
+  }
+  for _, target := range targets {
+    _, err = fmt.Fprint(target, bytes) // and transfer it
+    return err
+  }
+  return nil
 }
-w1.Write(b)
-w2.Write(b)
 ```
 
-
-```go {all|2|all}
-// list all writers you need to write to with io.MultiWriter
-dsts := io.MultiWriter(dst1, dst2, dst3)
-// then copy the input from the src to the dst
-_, err := io.Copy(dsts, src)
-if err != nil {
-  return err
+```go {3,5|all}
+func forwardContentToTargets(targets ...io.Writer, source io.Reader) error {
+  // create a writer that includes all targets
+  dsts := io.MultiWriter(targets)
+  // read the source and transfer it
+  _, err := io.Copy(target, source)
+  if err != nil {
+    return err
+  }
 }
 ```
 ````
 </v-click>
-
-<!-- Imagine I'm writing a chat application and I want to transfer a message to a person, a common way to do it is to read it and transfer it again -->
 
 ---
 transition: fade-out
@@ -176,6 +172,9 @@ layout: lblue-fact
 ---
 
 Gem #1: use io.Copy when transferring data
+<v-click>
+<div class="font-size-5">use io.Read* when using that data</div>
+</v-click>
 
 ---
 transition: fade-out
@@ -183,7 +182,7 @@ transition: fade-out
 
 # Example #2
 
-Error creation and wrapping
+Error creation
 
 <v-click>Let's see how errors can be created in Go code</v-click>
 
@@ -191,44 +190,70 @@ Error creation and wrapping
 ````md magic-move {lines: true}
 ```go
 // A new error
-err := errors.New("error in transferring the message")
+err := errors.New("an error occurred")
 ```
 
 ```go
 // A new error with fmt.Errorf
-err := fmt.Errorf("error in transferring the message: %s", msg)
+err := fmt.Errorf("an error occurred: %s", msg)
 ```
 
 ```go
-// A new error with fmt.Errorf referencing another error by error message (%s, %v or %q)
-err := fmt.Errorf("error in transferring the message: %s", oErr.Error())
+// A new error with fmt.Errorf referencing another error
+err := fmt.Errorf("an error occurred: %s", oErr.Error())
 ```
 ````
 </v-click>
 
 <v-clicks>
 
-An application gets more complex if you need to bind the way errors are handled with its text message.
+Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle
 
-- Unit tests broken because the error message was not the one expected
+- Unit tests broken because the error message was not matching the one expected
 
-_A human cares about the error message, an application cares more about what type of error it is_
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGYzdzR2b3Y5ZXdjZmp4bHBlaHJ5aGozZXl6bjU5NnI1MTVxaXFiYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/TJawtKM6OCKkvwCIqX/giphy.gif" class="m-10 h-40 rounded shadow" />
 
-To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019).
-
-And more recently, multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023).
 </v-clicks>
+
+---
+transition: fade-out
+layout: lblue-fact
+---
+
+A human cares about the error message
+
+<v-click>
+<div class="font-size-5">*a program cares more about what kind of error it is</div>
+</v-click>
+
+---
+transition: fade-out
+---
+
+# Example #2
+
+Error wrapping
+
+To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019)
+
+And more recently, multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023)
 
 <v-click>
 ````md magic-move {lines: true}
+
 ```go
-// A new error with fmt.Errorf wrapping another error 
-err := fmt.Errorf("error in transferring the message: %w", oErr)
+// A new error with fmt.Errorf referencing another error
+err := fmt.Errorf("an error occurred: %s", oErr.Error())
+```
+
+```go
+// A new error with fmt.Errorf wrapping another error
+err := fmt.Errorf("an error occurred: %w", oErr)
 ```
 
 ```go
 // A new error with fmt.Errorf wrapping multiple errors
-err := fmt.Errorf("error in transferring the message: %w, %w, %w", oErr1, oErr2, oErr3)
+err := fmt.Errorf("an error occurred: %w, %w, %w", oErr1, oErr2, oErr3)
 ```
 
 ```go
@@ -240,10 +265,10 @@ err := errors.Join(oErr1, oErr2, oErr3)
 
 <v-click>
 
-With wrapping you can use _errors.As_ and _errors.Is_ to handle errors in a simpler and safer way.
-</v-click>
+By __wrapping__ an error you are creating a new error by which kind it is
 
-<!-- Errors: we all love them, we started creating them with errors.New and fmt.Errorf. -->
+By using __errors.As__ and __errors.Is__ you can test an error for what it may be or not be instead of what kind of message it contains
+</v-click>
 
 ---
 transition: fade-out
@@ -268,11 +293,11 @@ transition: fade-out
 
 # Example #3
 
-Slice and maps operations and generics
+Slices and maps packages
 
 <v-clicks>
 
-Let's see the example of a proxy server that has to manipulate an input header from an HTTP request by adding some custom headers and removing others.
+As a _proxy server_, I want to manipulate an input header from an HTTP request by adding some custom headers and removing others
 
 ````md magic-move {lines: true}
 ```go
@@ -302,14 +327,13 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 ```
 ````
 
-Since Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) and the introduction of generics, we can use the _maps_ and _slices_ packages to do operations on any kind of map or slice.
+Generics were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023)
 
-This results in less loops to read and more straightforward code.
+And with them the __maps__ and __slices__ packages were introduced to leverage generics to do operations on them with easier and more straightforward code
 </v-clicks>
 
-
 <!-- 
-I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`.
+I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`
 -->
 
 ---
@@ -319,7 +343,7 @@ layout: lblue-fact
 
 Gem #3: use maps and slices packages
 <v-click>
-<div class="font-size-5">and reduce the number of loops you'll have to do on them</div>
+<div class="font-size-5">and reduce the complexity of the code dealing with them</div>
 </v-click>
 
 ---
@@ -331,20 +355,22 @@ backgroundSize: 80%
 
 # Conclusions
 
-Strive for the same simplicity that Go strives for 
+Striving for simplicity
 
 <v-clicks>
+The topic of simplicity is not new
 
-The standard library evolves.
+- Rob Pike's [talk](https://www.youtube.com/watch?v=rFejpH_tAHM&t=1s): Simplicity is Complicated;
+- Go Time's episode [#296](https://changelog.com/gotime/296): Principles of simplicity;
 
-Our code should follow as well.
+And today we saw it with some examples
 
 From time to time have a look at:
 
 - the [standard library](https://pkg.go.dev/std) packages
 - the [release notes](https://tip.golang.org/doc/devel/release)
 
-These are the places where we'll find the most valuable gems to make our Go code simpler
+Because these are the places where you'll find the most valuable gems to make your Go code simpler
 </v-clicks>
 
 ---
@@ -381,7 +407,3 @@ Thank you very much!
     </a>
   </div>
 </div>
-
----
-transition: fade-out
----
