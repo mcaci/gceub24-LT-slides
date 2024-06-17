@@ -57,25 +57,21 @@ backgroundSize: 80%
 
 # Why is it important?
 
-<div/>
+<br/>
 
 <v-clicks>
 
-As Go is simple to learn
+As Go is simple to learn, you can adopt it for your everyday work __faster__
 
-- you can adopt it for your everyday work __faster__
+As Go is simple to write, you can write __clearer__ code
 
-As Go is simple to write
+As Go is simple to read, __anyone__ will be able to understand it __more easily__
 
-- you can write __clearer__ code
-
-As Go is simple to read
-
-- __anyone__ will be able to understand it __more easily__
+<br/>
 
 __Leveraging the simplicity of Go is the key to improving our Go skills__
 
-Let's see it with some examples
+<div class="font-size-3">Let's see it with some examples</div>
 </v-clicks>
 
 <!-- 
@@ -205,15 +201,14 @@ err := fmt.Errorf("an error occurred: %s", oErr.Error())
 ````
 </v-click>
 
-<v-clicks>
+<v-click>Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle</v-click>
 
-Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle
+<v-click>
 
 - Unit tests broken because the error message was not matching the one expected
 
-<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGYzdzR2b3Y5ZXdjZmp4bHBlaHJ5aGozZXl6bjU5NnI1MTVxaXFiYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/TJawtKM6OCKkvwCIqX/giphy.gif" class="m-10 h-40 rounded shadow" />
-
-</v-clicks>
+<img src="/images/facepalm.webp" class="m-10 h-40 rounded shadow" />
+</v-click>
 
 ---
 transition: fade-out
@@ -263,12 +258,12 @@ err := errors.Join(oErr1, oErr2, oErr3)
 ````
 </v-click>
 
-<v-click>
+<v-clicks>
 
-By __wrapping__ an error you are creating a new error by which kind it is
+By __wrapping__ an error you are creating a new error telling which kind it is
 
-By using __errors.As__ and __errors.Is__ you can test an error for what it may be or not be instead of what kind of message it contains
-</v-click>
+By using __errors.As__ and __errors.Is__ you can test an error for what it may be instead of what kind of message it contains
+</v-clicks>
 
 ---
 transition: fade-out
@@ -329,7 +324,7 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 
 Generics were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023)
 
-And with them the __maps__ and __slices__ packages were introduced to leverage generics to do operations on them with easier and more straightforward code
+In the same release, __maps__ and __slices__ packages were introduced to simplify operations made on them
 </v-clicks>
 
 <!-- 
@@ -357,21 +352,29 @@ backgroundSize: 80%
 
 Striving for simplicity
 
-<v-clicks>
+<v-click>
+
 The topic of simplicity is not new
 
 - Rob Pike's [talk](https://www.youtube.com/watch?v=rFejpH_tAHM&t=1s): Simplicity is Complicated;
 - Go Time's episode [#296](https://changelog.com/gotime/296): Principles of simplicity;
 
-And today we saw it with some examples
+</v-click>
 
-From time to time have a look at:
+<v-click>Today we saw simplicity in action with few gems</v-click>
+
+<v-click>
+
+__What you can do__ is from time to time have a look at:
 
 - the [standard library](https://pkg.go.dev/std) packages
 - the [release notes](https://tip.golang.org/doc/devel/release)
+</v-click>
 
-Because these are the places where you'll find the most valuable gems to make your Go code simpler
-</v-clicks>
+<v-click>
+
+__Because these are the places where you'll find the most valuable gems to make your Go code simpler__
+</v-click>
 
 ---
 layout: fact

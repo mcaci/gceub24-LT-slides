@@ -9,3 +9,5 @@ To start the slide show:
 - open http://localhost:3030 if not done automatically
 
 The slides have built with [Slidev](https://github.com/slidevjs/slidev).
+
+[Here](https://mcaci.github.io/gceub24-LT-slides/) is the link to the presentation itself.
