@@ -173,49 +173,20 @@ err := fmt.Errorf("an error occurred: %s", oErr.Error())
 
 <v-clicks>
 
-Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle
+Making a reference to an error via its value (%\[s|q|v]) makes it more difficult to handle
 - Unit tests broken because the error message was not matching the one expected
 
 <img src="/images/shocked.gif" class="m-1 h-40 rounded shadow" />
+
+To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) and multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors)
+
+We can replace %\[s|q|v] with %w or use __errors.Join__ to delegate to the standard library the aspect of formatting of the error and concentrate only on its creation
 </v-clicks>
 
----
-transition: fade-out
----
-
-# Example #2
-
-Wrapping errors
-
-<v-clicks>
-
-To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019) and multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023)
-
-````md magic-move {lines: true}
-
-```go
-// A new error with fmt.Errorf referencing another error
-err := fmt.Errorf("an error occurred: %s", oErr.Error())
-```
-
-```go
-// A new error with fmt.Errorf wrapping another error
-err := fmt.Errorf("an error occurred: %w", oErr)
-```
-
-```go
-// A new error with fmt.Errorf wrapping multiple errors
-err := fmt.Errorf("an error occurred: %w, %w, %w", oErr1, oErr2, oErr3)
-```
-
-```go
-// A new error with errors.Join wrapping multiple errors
-err := errors.Join(oErr1, oErr2, oErr3)
-```
-````
-
-Using __errors.Join__ we can delegate to the standard library the formatting of the error message and concentrate on the creation of the error
-</v-clicks>
+<!-- 
+Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019) 
+Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023) 
+-->
 
 ---
 transition: fade-out
@@ -223,9 +194,8 @@ layout: lblue-fact
 ---
 
 Gem #2: A human cares about the error message
-
 <v-click>
-<div class="font-size-8">a program cares more about what kind of error it is</div>
+<div class="font-size-8">a program cares about what kind of error it is</div>
 </v-click>
 
 
@@ -271,7 +241,7 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 
 __Maps__ and __slices__ packages were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) together with generics
 
-The packages use generics to simplify maps and slices operations
+These packages use generics to simplify maps and slices operations
 </v-clicks>
 
 ---
