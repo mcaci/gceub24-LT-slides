@@ -36,10 +36,6 @@ mdc: true
     </div>
 </div>
 
-<!-- 
-Bio: I'm Michele, Italian from Sicily, I am a passionate Gopher since 2018 and before then I used to work in Java, Scala and C++. I always like make side projects and develop new things when time let's me :D. Besides programming, I enjoy swimming, cooking and learning languages; currently, I'm learning Japanese: Yoroshiku onegai shimasu! 
--->
-
 ---
 transition: fade-out
 layout: fact
@@ -57,15 +53,11 @@ backgroundSize: 80%
 
 # Why is it important?
 
-<br/>
+Striving for simplicity
 
 <v-clicks>
 
-As Go is simple to learn, you can adopt it for your everyday work __faster__
-
-As Go is simple to write, you can write __clearer__ code
-
-As Go is simple to read, __anyone__ will be able to understand it __more easily__
+As a simple language it is __easier__ to adopt, __simpler__ to write and anyone with a basic knowledge will be able to jump into a Go codebase and understand it __faster__
 
 <br/>
 
@@ -74,40 +66,19 @@ __Leveraging the simplicity of Go is the key to improving our Go skills__
 <div class="font-size-3">Let's see it with some examples</div>
 </v-clicks>
 
-<!-- 
-Both related to our codebase, especially from my personal experience, and to the standard library
-
-The **standard library** has tools from old and new that can level up our Go game
-
-Let's make our Go game even stronger with these treasures from the standard library
-
-Additional information -> With this proposal I want to showcase at most three usecases from the standard that can help our daily life while writing Go code:
-
-1) How to manage data transfer with the io package: from io.Copy vs io.ReadAll up to the io.Pipe and io.MultiWriter;
-2) How to manage error creation from the fmt package to the errors package, from the verbs "%s", "%v" and "%w" up to the errors.Join;
-3) How to manage efficiently slices and maps operations witht the use of the generic functions in the slices and maps packages;
-
-I know it's a lot of content for the lightning talk and I will be very careful at the end in selecting which of these items I will present but I'm confident that it will give to other gophers some inspiration in going out of the box yet still in the standard library to discover all the powerful tools it provides. I plan to use just a slideshow since the time is short
--->
-
 ---
 transition: fade-out
 ---
 
 # Example #1
 
-transferring data
-
-<v-click>
-
-For example storing the content of a CSV file or transferring the body of an HTTP request
-</v-click>
+Transferring data from a source to a target
 
 <v-click>
 
 ````md magic-move {lines: true}
 ```go {all|2|2,6}
-func forwardContentToTarget(target io.Writer, source io.Reader) error {
+func forwardContentToTarget(source io.Reader, target io.Writer) error {
   bytes, err := io.ReadAll(source) // read the source
   if err != nil {
     return err
@@ -118,7 +89,7 @@ func forwardContentToTarget(target io.Writer, source io.Reader) error {
 ```
 
 ```go {2|all}
-func forwardContentToTarget(target io.Writer, source io.Reader) error {
+func forwardContentToTarget(source io.Reader, target io.Writer) error {
   _, err := io.Copy(target, source) // read the source and transfer it
   if err != nil {
     return err
@@ -135,7 +106,7 @@ How about transferring the same content to multiple targets?
 <v-click>
 ````md magic-move {lines: true}
 ```go {all|2|2,6-9}
-func forwardContentToTargets(targets ...io.Writer, source io.Reader) error {
+func forwardContentToTargets(source io.Reader, targets ...io.Writer) error {
   bytes, err := io.ReadAll(source) // read the source
   if err != nil {
     return err
@@ -149,7 +120,7 @@ func forwardContentToTargets(targets ...io.Writer, source io.Reader) error {
 ```
 
 ```go {3,5|all}
-func forwardContentToTargets(targets ...io.Writer, source io.Reader) error {
+func forwardContentToTargets(source io.Reader, targets ...io.Writer) error {
   // create a writer that includes all targets
   dsts := io.MultiWriter(targets)
   // read the source and transfer it
@@ -167,9 +138,9 @@ transition: fade-out
 layout: lblue-fact
 ---
 
-Gem #1: use io.Copy when transferring data
+Gem #1: delegate the complexity of the code to the standard library
 <v-click>
-<div class="font-size-5">use io.Read* when using that data</div>
+<div class="font-size-5">use io.Copy when transferring data</div>
 </v-click>
 
 ---
@@ -178,9 +149,7 @@ transition: fade-out
 
 # Example #2
 
-Error creation
-
-<v-click>Let's see how errors can be created in Go code</v-click>
+Creating new errors
 
 <v-click>
 ````md magic-move {lines: true}
@@ -210,28 +179,7 @@ err := fmt.Errorf("an error occurred: %s", oErr.Error())
 <img src="/images/facepalm.webp" class="m-10 h-40 rounded shadow" />
 </v-click>
 
----
-transition: fade-out
-layout: lblue-fact
----
-
-A human cares about the error message
-
-<v-click>
-<div class="font-size-5">*a program cares more about what kind of error it is</div>
-</v-click>
-
----
-transition: fade-out
----
-
-# Example #2
-
-Error wrapping
-
-To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019)
-
-And more recently, multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023)
+To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019) and multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023)
 
 <v-click>
 ````md magic-move {lines: true}
@@ -258,25 +206,15 @@ err := errors.Join(oErr1, oErr2, oErr3)
 ````
 </v-click>
 
-<v-clicks>
-
-By __wrapping__ an error you are creating a new error telling which kind it is
-
-By using __errors.As__ and __errors.Is__ you can test an error for what it may be instead of what kind of message it contains
-</v-clicks>
-
 ---
 transition: fade-out
 layout: lblue-fact
 ---
 
-Gem #2: wrap errors with %w or errors.Join
+Gem #2: A human cares about the error message
 
 <v-click>
-<div class="font-size-5">*changing from %[s|q|v] to %w is transparent</div>
-</v-click>
-<v-click>
-<div class="font-size-5">most of the times</div>
+<div class="font-size-5">a program cares more about what kind of error it is</div>
 </v-click>
 
 
@@ -288,11 +226,9 @@ transition: fade-out
 
 # Example #3
 
-Slices and maps packages
+Slices and maps packages (manipulating an http.Header)
 
 <v-clicks>
-
-As a _proxy server_, I want to manipulate an input header from an HTTP request by adding some custom headers and removing others
 
 ````md magic-move {lines: true}
 ```go
@@ -322,23 +258,17 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 ```
 ````
 
-Generics were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023)
-
-In the same release, __maps__ and __slices__ packages were introduced to simplify operations made on them
+__Maps__ and __slices__ packages were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) together with generics and use them to simplify maps and slices operations
 </v-clicks>
-
-<!-- 
-I have been working in an application that works as a proxy server between client sending http requests, manipulates them and forwards them to the intended target. And one of the main job was to manipate an `http.Header` which in Go is simply a `map[string][]string`
--->
 
 ---
 transition: fade-out
 layout: lblue-fact
 ---
 
-Gem #3: use maps and slices packages
+Gem #3: check new Go features as they released
 <v-click>
-<div class="font-size-5">and reduce the complexity of the code dealing with them</div>
+<div class="font-size-5">and see how they can be used to simplify your code</div>
 </v-click>
 
 ---
