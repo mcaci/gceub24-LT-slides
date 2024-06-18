@@ -57,7 +57,11 @@ Striving for simplicity
 
 <v-clicks>
 
-As a simple language it is __easier__ to adopt, __simpler__ to write and anyone with a basic knowledge will be able to jump into a Go codebase and understand it __faster__
+As Go is simple to learn, you can adopt it __faster__ for your everyday work
+
+As Go is simple to write, you can write __clearer__ code
+
+As Go is simple to read, __anyone__ with basic Go skills will be able to understand it __more easily__
 
 <br/>
 
@@ -65,7 +69,6 @@ __Leveraging the simplicity of Go is the key to improving our Go skills__
 
 <div class="font-size-3">Let's see it with some examples</div>
 </v-clicks>
-
 ---
 transition: fade-out
 ---
