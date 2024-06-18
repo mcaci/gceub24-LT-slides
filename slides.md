@@ -138,10 +138,8 @@ transition: fade-out
 layout: lblue-fact
 ---
 
-Gem #1: delegate the complexity of the code to the standard library
-<v-click>
-<div class="font-size-5">use io.Copy when transferring data</div>
-</v-click>
+Gem #1: delegate the complexity of the code
+<div class="font-size-10">to the standard library</div>
 
 ---
 transition: fade-out
@@ -170,18 +168,26 @@ err := fmt.Errorf("an error occurred: %s", oErr.Error())
 ````
 </v-click>
 
-<v-click>Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle</v-click>
+<v-clicks>
 
-<v-click>
-
+Making a reference to an error via its value (%[s|q|v]) makes it more difficult to handle
 - Unit tests broken because the error message was not matching the one expected
 
-<img src="/images/facepalm.webp" class="m-10 h-40 rounded shadow" />
-</v-click>
+<img src="/images/shocked.gif" class="m-1 h-40 rounded shadow" />
+</v-clicks>
+
+---
+transition: fade-out
+---
+
+# Example #2
+
+Wrapping errors
+
+<v-clicks>
 
 To our help, error wrapping was released with Go [v1.13](https://tip.golang.org/doc/go1.13#error_wrapping) (Sep 2019) and multi-error wrapping with Go [v1.20](https://tip.golang.org/doc/go1.20#errors) (Feb 2023)
 
-<v-click>
 ````md magic-move {lines: true}
 
 ```go
@@ -204,7 +210,9 @@ err := fmt.Errorf("an error occurred: %w, %w, %w", oErr1, oErr2, oErr3)
 err := errors.Join(oErr1, oErr2, oErr3)
 ```
 ````
-</v-click>
+
+Using __errors.Join__ we can delegate to the standard library the formatting of the error message and concentrate on the creation of the error
+</v-clicks>
 
 ---
 transition: fade-out
@@ -214,7 +222,7 @@ layout: lblue-fact
 Gem #2: A human cares about the error message
 
 <v-click>
-<div class="font-size-5">a program cares more about what kind of error it is</div>
+<div class="font-size-8">a program cares more about what kind of error it is</div>
 </v-click>
 
 
@@ -258,7 +266,9 @@ func update(h http.Header, toAdd http.Header, toDelete []string) {
 ```
 ````
 
-__Maps__ and __slices__ packages were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) together with generics and use them to simplify maps and slices operations
+__Maps__ and __slices__ packages were released with Go [v1.21](https://tip.golang.org/doc/go1.21#library) (Aug 2023) together with generics
+
+The packages use generics to simplify maps and slices operations
 </v-clicks>
 
 ---
@@ -268,7 +278,7 @@ layout: lblue-fact
 
 Gem #3: check new Go features as they released
 <v-click>
-<div class="font-size-5">and see how they can be used to simplify your code</div>
+<div class="font-size-8">and see if you can use them to simplify your code</div>
 </v-click>
 
 ---
