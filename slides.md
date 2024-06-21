@@ -127,7 +127,7 @@ func forwardContentToTargets(source io.Reader, targets ...io.Writer) error {
   // create a writer that includes all targets
   dsts := io.MultiWriter(targets)
   // read the source and transfer it
-  _, err := io.Copy(target, source)
+  _, err := io.Copy(dsts, source)
   if err != nil {
     return err
   }
